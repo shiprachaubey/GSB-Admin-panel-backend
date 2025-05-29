@@ -43,15 +43,20 @@ const app = express();
 
 connectDB();
 
-
+ app.use(express.json());
 dotenv.config();
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-
-const dietPlanRoutes = require("./routes/PDFRoutes")
+const authRoutes = require('./routes/authRoutes');
+const dietPlanRoutes = require("./routes/PDFRoutes");
+const videoRoutes = require ("./routes/videoRoutes");
 
 // ❗️NO express.json() here — it breaks multipart!
-app.use("/api/dietplans", dietPlanRoutes);
+// app.use("/api/dietplans", dietPlanRoutes);
+
+app.use('/api/auth', authRoutes);
+app.use('/api/dietplans', dietPlanRoutes);
+ app.use('/api/videos', videoRoutes);
 
 app.listen(9000, () => console.log("✅ Server running on port 9000"));

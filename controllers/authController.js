@@ -4,6 +4,7 @@ const Admin = require('../models/Admin');
 
 const HARDCODED_EMAIL = 'admin@gsbpathy.com';
 const HARDCODED_PASSWORD = 'gsbpathy123';
+
 exports.loginAdmin = async (req, res) => {
   const { email, password } = req.body;
   console.log("Login attempt:", email, password);
