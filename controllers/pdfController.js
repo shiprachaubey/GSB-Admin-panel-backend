@@ -4,6 +4,7 @@ const { GridFSBucket } = require('mongodb');
 const fs = require('fs');
 
 const { PutObjectCommand } = require("@aws-sdk/client-s3");
+const { DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const s3 = require("../utils/S3Client");
 const { v4: uuidv4 } = require("uuid");
 
@@ -89,5 +90,43 @@ exports.getAllDietPlans = async (req, res) => {
   } catch (err) {
     console.error("Fetch error:", err);
     res.status(500).json({ message: "Failed to fetch diet plans", error: err.message });
+  }
+};
+
+
+
+
+exports.deletePDF = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedPDF = await PDF.findByIdAndDelete(id);
+
+    if (!deletedPDF) {
+      return res.status(404).json({ message: "PDF not found" });
+    }
+
+    // Extract S3 keys from URLs
+    const pdfKey = new URL(deletedPDF.pdfUrl).pathname.substring(1); // remove leading '/'
+    const thumbKey = deletedPDF.thumbnailUrl ? new URL(deletedPDF.thumbnailUrl).pathname.substring(1) : null;
+
+    // Delete PDF from S3
+    await s3.send(new DeleteObjectCommand({
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: pdfKey,
+    }));
+
+    // Delete thumbnail if present
+    if (thumbKey) {
+      await s3.send(new DeleteObjectCommand({
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: thumbKey,
+      }));
+    }
+
+    res.status(200).json({ message: "PDF deleted successfully", pdf: deletedPDF });
+  } catch (error) {
+    console.error("Error deleting PDF:", error);
+    res.status(500).json({ message: "Failed to delete PDF", error: error.message });
   }
 };

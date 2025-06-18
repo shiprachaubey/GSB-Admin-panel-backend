@@ -7,7 +7,7 @@ const videoSchema = new mongoose.Schema({
   thumbnailUrl: String, 
   category: { 
     type: String, 
-    enum: ['meditation', 'education', 'success stories', 'fitness'], 
+    enum: ['Meditation', 'Education', 'Success Stories', 'Fitness'], 
     required: true 
   },
   accessLevel: { type: String, enum: ['Free', 'Paid'], default: 'Free' },

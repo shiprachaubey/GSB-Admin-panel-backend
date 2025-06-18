@@ -42,21 +42,34 @@ const { connectDB } = require('./config/db');
 const app = express();
 
 connectDB();
-
- app.use(express.json());
+app.use(cors());
+app.use(express.json());
 dotenv.config();
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const authRoutes = require('./routes/authRoutes');
+const teamRoutes = require('./routes/teamRoutes');
 const dietPlanRoutes = require("./routes/PDFRoutes");
 const videoRoutes = require ("./routes/videoRoutes");
-
-// ❗️NO express.json() here — it breaks multipart!
-// app.use("/api/dietplans", dietPlanRoutes);
+const notificationRoutes = require('./routes/notificationRoutes');
+const productRoutes = require('./routes/Product');
+const consultantRoutes = require('./routes/consultationRoutes');
+const chatRoutes = require('./routes/chatRoutes');
+const cartRoutes = require('./routes/cartRoutes');
+const orderRoutes = require ('./routes/orderRoutes');
 
 app.use('/api/auth', authRoutes);
+app.use('/api/teams', teamRoutes);
 app.use('/api/dietplans', dietPlanRoutes);
- app.use('/api/videos', videoRoutes);
+app.use('/api/videos', videoRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/consultancy', consultantRoutes);
+app.use('/api/chat', chatRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/orders', orderRoutes);
 
-app.listen(9000, () => console.log("✅ Server running on port 9000"));
+app.listen(9000, '0.0.0.0', () => {
+  console.log('Server running on port 9000');
+});

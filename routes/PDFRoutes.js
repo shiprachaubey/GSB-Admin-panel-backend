@@ -19,6 +19,8 @@ const controller = require("../controllers/pdfController");
 
 router.post("/upload", upload, controller.uploadDietPlan);
 router.get("/get-pdf", controller.getAllDietPlans); 
+router.delete('/:id',  controller.deletePDF);
+
 
 module.exports = router;
 
