@@ -32,7 +32,7 @@ const { uploadFileToS3 } = require("../services/s3Uploader");
 
 exports.uploadVideo = async (req, res) => {
   try {
-    const { title, description, category, accessLevel } = req.body;
+    const { title, description, category, accessLevel , youtubeLink} = req.body;
     const videoFile = req.files?.video?.[0];
     const thumbnailFile = req.files?.thumbnail?.[0];
 
@@ -50,6 +50,7 @@ exports.uploadVideo = async (req, res) => {
       accessLevel,
       videoUrl,
       thumbnailUrl,
+      youtubeLink
     });
 
     res.status(201).json({ message: "Video uploaded", video: videoDoc });
