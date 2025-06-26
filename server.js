@@ -16,6 +16,8 @@ dotenv.config();
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const storyRoutes = require('./routes/storyRoutes');
 const teamRoutes = require('./routes/teamRoutes');
 const dietPlanRoutes = require("./routes/PDFRoutes");
 const videoRoutes = require ("./routes/videoRoutes");
@@ -25,9 +27,13 @@ const consultantRoutes = require('./routes/consultationRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const orderRoutes = require ('./routes/orderRoutes');
+const dailyUpdateRoutes = require('./routes/dailyUpdateRoutes');
 
 app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes)
 app.use('/api/teams', teamRoutes);
+app.use('/api/stories', storyRoutes);
+app.use('/api/daily-updates', dailyUpdateRoutes);
 app.use('/api/dietplans', dietPlanRoutes);
 app.use('/api/videos', videoRoutes);
 app.use('/api/notifications', notificationRoutes);
